@@ -1,0 +1,22 @@
+openapi: 3.0.0
+info:
+  title:   Vehicle-API
+  version: 0.1.0
+paths:
+  /v1:
+    get:
+      summary: Hello World
+      x-amazon-apigateway-integration:
+        uri: "${uri}"
+        httpMethod: "POST"
+        type:  "aws_proxy"
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: string
+# ...
+# components:
+# ...
