@@ -1,0 +1,53 @@
+name: ci
+
+on:
+  push:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+#   defaults:
+#     run:
+#       working-directory: "tests"
+    steps:
+      - run: echo "Foo!"
+
+    # - name: Harden Runner
+    #   uses: step-security/harden-runner@v2
+    #   with:
+    #     egress-policy: audit
+
+    # - name: Check-Out
+    #   uses: actions/checkout@v4
+
+    # - name: AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v4
+    #   with:
+    #     aws-region:     ${{secrets.AWS_REGION}}
+    #     role-to-assume: ${{secrets.ROLE_TO_ASSUME}}
+
+    # - name: Install Terraform
+    #   uses: hashicorp/setup-terraform@v3
+    #   with:
+    #     terraform_wrapper: false # => https://github.com/gruntwork-io/terragrunt/issues/1202
+    
+    # - name: Install Go
+    #   uses: actions/setup-go@v5
+    #   with:
+    #     cache-dependency-path: tests/go.sum
+    #     go-version: "^1.23.1"
+
+    # - name: Go Version
+    #   run:  go version
+
+    # - name: Go Test
+    #   run:  go test -v -timeout 30m
+    #   id:   test
+
+#     - {...}
+#   {...}
+# {...}
