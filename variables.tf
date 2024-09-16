@@ -30,16 +30,6 @@ variable "app_name" {
   type = string
 }
 
-variable "hash_key_name" {
-  default = "Id"
-  type    = string
-}
-
-variable "hash_key_type" {
-  default = "S"
-  type    = string
-}
-
 variable "env_vars" {
   type = map(any)
 }

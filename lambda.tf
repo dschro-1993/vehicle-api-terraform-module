@@ -20,17 +20,6 @@ resource "aws_iam_role" "iam_role" {
           Resource = "*"
           Action   = ["xray:PutTraceSegments", "xray:PutTelemetryRecords"]
           Effect   = "Allow"
-        },
-        {
-          Effect   = "Allow"
-          Resource = aws_dynamodb_table.dynamodb_table.arn
-          Action = [
-            "dynamodb:DeleteItem",
-            "dynamodb:GetItem",
-            "dynamodb:PutItem",
-            "dynamodb:Query",
-            # {...}
-          ]
         }
       ]
     })
@@ -83,7 +72,6 @@ resource "aws_lambda_function" "api_handler" {
 
   environment {
     variables = merge(
-      { TABLE_NAME = aws_dynamodb_table.dynamodb_table.id },
       var.env_vars,
     # {...}
     )
