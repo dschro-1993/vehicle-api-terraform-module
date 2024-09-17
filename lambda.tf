@@ -17,9 +17,19 @@ resource "aws_iam_role" "iam_role" {
       Version = "2012-10-17"
       Statement = [
         {
+          Effect   = "Allow"
           Resource = "*"
           Action   = ["xray:PutTraceSegments", "xray:PutTelemetryRecords"]
+        },
+        {
           Effect   = "Allow"
+          Resource = "*" # Todo
+          Action   = [
+            "ssm:GetParametersByPath",
+            "ssm:GetParameters",
+            "ssm:GetParameter",
+            "kms:Decrypt",
+          ]
         }
       ]
     })
