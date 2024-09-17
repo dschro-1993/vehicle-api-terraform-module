@@ -30,7 +30,7 @@ resource "aws_s3_object" "layer_object" {
   key         = var.lambda_layer_output_file
 }
 
-resource "aws_lambda_layer_version" "my_layer_version" {
+resource "aws_lambda_layer_version" "custom_layer" {
   layer_name               = "${var.app_name}-${var.env}-custom-layer"
   compatible_architectures = ["arm64"]
   compatible_runtimes      = ["python3.12"]

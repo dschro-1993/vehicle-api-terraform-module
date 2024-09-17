@@ -38,7 +38,7 @@ data "archive_file" "archive" {
 }
 
 resource "aws_lambda_permission" "lambda_permission" {
-  source_arn    = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*/*" # STAGE/METHOD/PATH
+  source_arn    = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*/*" # {STAGE}/{METHOD}/{PATH}
   function_name = aws_lambda_function.api_handler.function_name
   principal     = "apigateway.amazonaws.com"
   action        = "lambda:InvokeFunction"
@@ -56,7 +56,7 @@ resource "aws_lambda_function" "api_handler" {
 
   layers = [
     "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:79",
-    aws_lambda_layer_version.my_layer_version.arn
+    aws_lambda_layer_version.custom_layer.arn
   ]
 
   role          = aws_iam_role.iam_role.arn

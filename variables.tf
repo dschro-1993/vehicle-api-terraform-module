@@ -10,6 +10,21 @@ variable "zone_name" {
   type = string
 }
 
+variable "web_acl_logging_enabled" {
+  default = false
+  type    = bool
+}
+
+variable "api_gateway_execution_logging_enabled" {
+  default = false
+  type    = bool
+}
+
+variable "api_gateway_access_logging_enabled" {
+  default = false
+  type    = bool
+}
+
 variable "lambda_layer_output_file" {
   type = string
 }

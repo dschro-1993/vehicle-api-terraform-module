@@ -2,8 +2,11 @@ locals {
   rules = ["AWSManagedRulesCommonRuleSet"]
 }
 
+# Todo
+# resource "aws_wafv2_web_acl_logging_configuration" "logging_configuration" {}
+
 resource "aws_wafv2_web_acl_association" "web_acl_association" {
-  resource_arn = aws_api_gateway_stage.default.arn
+  resource_arn = aws_api_gateway_stage.stage.arn
   web_acl_arn  = aws_wafv2_web_acl.web_acl.arn
 }
 

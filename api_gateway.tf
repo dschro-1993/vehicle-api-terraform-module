@@ -1,4 +1,6 @@
-# Todo: Add Firehose/S3 for execution- and access-logging
+locals {
+# api_prefix = if var.env == "prod" ? "" : var.env
+}
 
 resource "aws_api_gateway_rest_api" "rest_api" {
   name = "${var.app_name}-${var.env}"
@@ -41,34 +43,52 @@ resource "aws_api_gateway_deployment" "deployment" {
   lifecycle { create_before_destroy = true }
 }
 
-resource "aws_api_gateway_stage" "default" {
-  deployment_id        = aws_api_gateway_deployment.deployment.id
-  rest_api_id          = aws_api_gateway_rest_api.rest_api.id
+# resource "aws_cloudwatch_log_group" "access_logging" {
+#   name              = "${var.app_name}-${var.env}-access-logging"
+#   retention_in_days = 100
+# }
+
+resource "aws_api_gateway_stage" "stage" {
+  deployment_id = aws_api_gateway_deployment.deployment.id
+
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  stage_name  = "api" # Todo => Add Env-Variable
+
   xray_tracing_enabled = !false
-  stage_name           = "api"
+
+# dynamic "access_log_settings" {
+#   for_each = var.api_gateway_access_logging_enabled ? [1] : []
+#   content {
+#     destination_arn = aws_cloudwatch_log_group.access_logging.arn
+#     format          = "{...}"
+#   }
+# }
 }
 
 # ---
 
 resource "aws_api_gateway_domain_name" "domain_name" {
+  endpoint_configuration { types = ["REGIONAL"] }
   domain_name              = "${var.app_name}-${var.env}.${var.zone_name}"
   regional_certificate_arn = aws_acm_certificate_validation.certificate_validation.certificate_arn
-  endpoint_configuration { types = ["REGIONAL"] }
 }
 
 resource "aws_route53_record" "alias_record" {
-  name    = aws_api_gateway_domain_name.domain_name.domain_name
-  type    = "A"
-  zone_id = data.aws_route53_zone.public.zone_id
   alias {
     evaluate_target_health = false
     name                   = aws_api_gateway_domain_name.domain_name.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.domain_name.regional_zone_id
   }
+  name    = aws_api_gateway_domain_name.domain_name.domain_name
+  zone_id = data.aws_route53_zone.public.zone_id
+  type    = "A"
 }
 
 resource "aws_api_gateway_base_path_mapping" "mapping" {
   domain_name = aws_api_gateway_domain_name.domain_name.domain_name
-  stage_name  = aws_api_gateway_stage.default.stage_name
-  api_id      = aws_api_gateway_rest_api.rest_api.id
+  stage_name  = aws_api_gateway_stage.stage.stage_name
+
+  api_id = aws_api_gateway_rest_api.rest_api.id
 }
+
+# {...}
